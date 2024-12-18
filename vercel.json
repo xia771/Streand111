@@ -1,7 +1,7 @@
 {
     "version": 2,
     "builds": [{
-        "src": "select_class/wsgi.py",
+        "src": "vercel_app.py",
         "use": "@vercel/python"
     }],
     "routes": [
@@ -15,10 +15,11 @@
         },
         {
             "src": "/(.*)",
-            "dest": "select_class/wsgi.py"
+            "dest": "vercel_app.py"
         }
     ],
     "env": {
-        "PYTHONPATH": "."
+        "PYTHONPATH": ".",
+        "DJANGO_SETTINGS_MODULE": "select_class.settings"
     }
 }
