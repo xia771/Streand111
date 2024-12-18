@@ -1,4 +1,5 @@
 {
+    "version": 2,
     "builds": [{
         "src": "select_class/wsgi.py",
         "use": "@vercel/python"
@@ -9,8 +10,15 @@
             "dest": "/static/$1"
         },
         {
+            "src": "/media/(.*)",
+            "dest": "/media/$1"
+        },
+        {
             "src": "/(.*)",
             "dest": "select_class/wsgi.py"
         }
-    ]
+    ],
+    "env": {
+        "PYTHONPATH": "."
+    }
 }
