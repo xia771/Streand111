@@ -1,5 +1,5 @@
 #!/bin/bash
-/opt/conda/bin/python -m pip install --upgrade pip
-/opt/conda/bin/pip install -r requirements.txt
-/opt/conda/bin/python manage.py collectstatic --noinput
-/opt/conda/bin/python manage.py migrate --noinput
+python3 -m pip install --upgrade pip
+pip install -r requirements.txt
+python3 manage.py collectstatic --noinput
+python3 manage.py migrate --noinput
