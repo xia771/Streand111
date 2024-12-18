@@ -1,0 +1,178 @@
+{% extends "course/nav.html" %}
+{% block title %}课程评教{% endblock %}
+{% block content %}
+    {% load static %}
+    <link href="{% static 'css/form.css' %}" rel="stylesheet">
+    <style>
+        .rating-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .page-title {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        .rating-section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        .rating-options {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .rating-option {
+            position: relative;
+            flex: 1;
+            min-width: 120px;
+        }
+        .rating-option input[type="radio"] {
+            display: none;
+        }
+        .rating-option label {
+            display: block;
+            padding: 12px 15px;
+            text-align: center;
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .rating-option input[type="radio"]:checked + label {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+        .rating-option label:hover {
+            background: #e9ecef;
+            border-color: #4CAF50;
+        }
+        .assessment-field {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 16px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+        .assessment-field:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-submit {
+            background: #4CAF50;
+            color: white;
+        }
+        .btn-submit:hover {
+            background: #45a049;
+        }
+        .btn-back {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-back:hover {
+            background: #5a6268;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .anonymous-toggle {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .anonymous-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+        .anonymous-toggle label {
+            font-size: 16px;
+            color: #444;
+            cursor: pointer;
+        }
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+    </style>
+
+    <div class="rating-container">
+        <h2 class="page-title">课程评教</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="rating-section">
+                <h3 class="section-title">课程评分：</h3>
+                <div class="rating-options">
+                    {% for value, label in form.fields.rating.choices %}
+                    <div class="rating-option">
+                        <input type="radio" name="rating" value="{{ value }}" id="rating_{{ value }}"
+                               {% if form.initial.rating == value %}checked{% endif %}>
+                        <label for="rating_{{ value }}">{{ label }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if form.rating.errors %}
+                <div class="error-message">{{ form.rating.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="anonymous-toggle">
+                <input type="checkbox" name="is_anonymous" id="is_anonymous" 
+                       {% if form.initial.is_anonymous %}checked{% endif %}>
+                <label for="is_anonymous">匿名提交评价</label>
+            </div>
+
+            <div class="rating-section">
+                <h3 class="section-title">评价内容：</h3>
+                <textarea name="assessment" class="assessment-field" 
+                          placeholder="请输入您对本课程的评价意见...">{{ form.initial.assessment }}</textarea>
+                {% if form.assessment.errors %}
+                <div class="error-message">{{ form.assessment.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="button-group">
+                <input type="submit" class="btn btn-submit" value="提交评教"/>
+                <input type="button" class="btn btn-back" value="返回" onclick="location.href='{{ return_url }}'" />
+            </div>
+        </form>
+    </div>
+{% endblock %}

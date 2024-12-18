@@ -1,0 +1,73 @@
+{% extends "course/nav.html" %}
+{% block title %}批量评分{% endblock %}
+{% block content %}
+    {% load static %}
+    <link href="{% static 'css/form.css' %}" rel="stylesheet">
+    <style>
+        .grade-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .grade-table th, .grade-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .grade-table th {
+            background-color: #f5f5f5;
+        }
+        .grade-input {
+            width: 60px;
+            padding: 4px;
+        }
+        .comment-input {
+            width: 200px;
+            padding: 4px;
+        }
+    </style>
+
+    <h3>批量评分 - {{ course.name }}</h3>
+    <div class="form create-update-from">
+        <form method="post" id="gradeForm">
+            {% csrf_token %}
+            <table class="grade-table">
+                <thead>
+                    <tr>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>分数</th>
+                        <th>评语</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cs in student_courses %}
+                    <tr>
+                        <td>{{ cs.student.grade }}{{ cs.student.number }}</td>
+                        <td>{{ cs.student.name }}</td>
+                        <td>
+                            <input type="number" min="0" max="100" step="0.1" 
+                                   name="score_{{ cs.student.grade }}{{ cs.student.number }}"
+                                   class="grade-input"
+                                   value="{{ cs.scores|default:'' }}"
+                                   placeholder="0-100">
+                        </td>
+                        <td>
+                            <input type="text" 
+                                   name="comment_{{ cs.student.grade }}{{ cs.student.number }}"
+                                   class="comment-input"
+                                   value="{{ cs.comments|default:'' }}"
+                                   placeholder="请输入评语">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="submit-button" style="margin-top: 20px;">
+                <input type="submit" value="保存所有成绩"/>
+                <input type="button" value="返回" onclick="location.href='{{ return_url }}'" />
+            </div>
+        </form>
+    </div>
+{% endblock %}
