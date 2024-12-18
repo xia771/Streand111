@@ -1,15 +1,16 @@
 import os
 import sys
+from pathlib import Path
 
-# Add the project directory to the Python path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent
 
-# Configure Django settings
+# Add the project root directory to the Python path
+sys.path.insert(0, str(BASE_DIR))
+
+# Configure Django settings before any Django imports
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'select_class.settings')
-os.environ.setdefault('PYTHONPATH', '.')
 
+# Initialize Django WSGI application
 from django.core.wsgi import get_wsgi_application
-application = get_wsgi_application()
-
-# Vercel needs the variable 'app'
-app = application
+app = get_wsgi_application()
